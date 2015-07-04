@@ -6,7 +6,6 @@ from .models import Cart, CartItem
 from products.models import Product, ProductVariation
 from .utils import *
 
-
 def view(request):
 	c = get_base_context(request)
 	try:
