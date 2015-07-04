@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block head_title %}
+	Funlayo Home
+{% endblock %}
+
+{% block content %}
+<div class="starter-template">
+  <h1>Bootstrap starter template</h1>
+  <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+</div>
+
+<div class="row">
+	{% for product in products %}
+	  	<div class="col-sm-6 col-md-4">
+			{#<a href="{% url 'single_product' product.slug %}">#}
+			<a href="{{product.get_absolute_url}}">
+				<div class="thumbnail">
+					{% if product.productimage_set.all %}
+						{% for item in product.productimage_set.all %}
+							{# above is a forign key same as model.modelwithforeignkey_set.all#}
+							{% if item.featured %}
+								<div style="width:200px; height:200px; 
+								background-image: url(/media/{{item.image}}) ;
+								background-size: cover;
+								background-repeat: no-repeat;
+								background-position: center;
+								margin: 0 auto;">&nbsp;</div>
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						<div style="width:200px; height:200px; 
+								background-image: url(/static/img/placeholder.svg) ;
+								background-size: cover;
+								background-repeat: no-repeat;
+								background-position: center;
+								margin: 0 auto;">&nbsp;</div>
+					{% endif %}
+			      	<div class="caption">
+			        	<h3>{{product.title}}</h3>
+				        <p>{{product.description}}</p>
+				        <p><a href="{{product.get_absolute_url}}" class="btn btn-primary" role="button">View</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+				    </div>
+			    </div>
+			</a>
+		</div>
+		{% cycle "" "" "</div><div class='row'>" %}
+		{# cycle works like a mod, it allows us to spit out things based on count for example we have 12 grids so creating a cycle with 3 makes it make things happen on every 4th grid#}
+	{% endfor %}
+</div>
+{% endblock %}

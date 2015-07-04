@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-sm-6">
+		{% for img in images %}
+			{% if img.featured %}
+				<div class="col-xs-12">
+					<img class="img-responsive" src="/media/{{img.image}}" alt="">
+				</div>
+				<hr/>
+			{% endif %}
+		{% endfor %}
+		{% for img in images %}
+			{% if not img.featured %}
+				<div class="row" style="margin-top: 10px">
+					<div class="col-xs-6 col-md-3">
+						<a href="" class="thumbnail">
+							<img class="img-responsive" src="/media/{{img.image}}" alt="">
+						</a>
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+	<div class="col-sm-6">
+		<div class="col-sm-8 pull-left">
+			<div class="page-header">
+				<h1>{{product.title}}
+					<!-- <a href="{% url 'add_to_cart' product.slug %}?qty=2" class="pull-right">Add To Cart</a> -->
+				</h1>
+			</div>
+		</div>
+		<div class="col-sm-4 pull-right">
+			<form class="form" action="{% url 'add_to_cart' product.slug %}" method="POST">	
+				{% csrf_token %}
+				<input name="qty" type="number" class="form-control" placeholder="Enter Quantity" value="1">
+
+				{% if product.productvariation_set.sizes %}
+					<select name="size" id="size" class="form-control">
+						{% for item in product.productvariation_set.sizes %}
+						{{item.title}}
+							<option value="{{item.title|lower}}">{{item.title}}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
+
+				{% if product.productvariation_set.colors %}
+					<select name="color" id="color" class="form-control">
+						{% for item in product.productvariation_set.colors %}
+						{{item.title}}
+							<option value="{{item.title|lower}}">{{item.title}}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
+
+				<button class="btn btn-success" type="Submit">Add To Cart</button>
+				
+			</form>
+		</div>
+		<div class="col-sm-12">
+			Price: {{product.price}}
+			<br/>
+			Shipping: Free with $25+ purchase
+			<hr/>
+			{{product.description|linebreaks}}
+		</div>
+	</div>
+</div>
+{% endblock %}
